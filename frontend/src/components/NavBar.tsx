@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Avatar } from "./BlogCard"
 import { useState } from "react"
 
@@ -7,12 +7,18 @@ export const NavBar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
     const navigateHome = () => {
-        navigate('/')
+        navigate('/blogs')
     }
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen)
     }
+
+    const handleSignOut = () => {
+        localStorage.removeItem('token')
+        navigate('/signin')
+    }
+    
 
     return(
         <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -21,6 +27,11 @@ export const NavBar = () => {
             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Medium</span>
         </a>
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+            <div className="relative">
+                <Link to={'/publish'}>
+                    <button type="button" className="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800 mr-10 mt-2">Publish</button>
+                </Link>
+            </div>
             <div className="relative">
                 <button type="button" onClick={toggleDropdown} className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded={isDropdownOpen} data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                     <span className="sr-only">Open user menu</span>
@@ -32,18 +43,9 @@ export const NavBar = () => {
                     <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
                     </div>
                     <ul className="py-2" aria-labelledby="user-menu-button">
-                    <li>
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Settings</a>
-                    </li>
-                    <li>
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Earnings</a>
-                    </li>
-                    <li>
-                        <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
-                    </li>
+                        <li>
+                            <a onClick={handleSignOut} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
+                        </li>
                     </ul>
                 </div>
             </div>

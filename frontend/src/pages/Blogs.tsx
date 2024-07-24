@@ -1,8 +1,10 @@
+import { useNavigate } from "react-router-dom"
 import { BlogCard, LoadingSkeleton } from "../components/BlogCard"
 // import { BlogCardInput } from "../components/BlogCard"
 import { NavBar } from "../components/NavBar"
 import { useBlogs } from "../hooks"
 import { BulkBlogs } from "../hooks"
+import { useEffect } from "react"
 
 // const testData: BlogCardInput = {
 //     authorName: "John Doe",
@@ -12,8 +14,16 @@ import { BulkBlogs } from "../hooks"
 // }
 
 export const Blogs = () => {
-    const { loading, blogs } = useBlogs()
-    if(loading){
+    const { loading, blogs, error } = useBlogs()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (error) {
+            navigate('/signin')
+        }
+    }, [error, navigate])
+
+    if (loading) {
         return (
             <LoadingSkeleton />
         )
@@ -26,6 +36,7 @@ export const Blogs = () => {
                 {/* <BlogCard {...testData} /> */}
                 {blogs.map((blog:BulkBlogs) => (
                     <BlogCard 
+                        key={blog.id}
                         id={blog.id}
                         authorName={blog.author.name || 'Anonymous'}
                         title={blog.title}
