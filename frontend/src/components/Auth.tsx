@@ -68,12 +68,10 @@ export const AuthSignUp = () => {
         try {
           const response = await axios.post(SIGNUP_URL, formData);
           const jwt = response.data;
-          if (typeof jwt === 'string') {
-            localStorage.setItem('token', jwt);
+          if (jwt) {
+            localStorage.setItem('token', `Bearer ${jwt}`);
             navigate('/blogs');
             console.log(response);
-          } else {
-            throw new Error('Invalid token received');
           }
         } catch (error) {
           // alert the user

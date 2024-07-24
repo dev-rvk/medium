@@ -4,6 +4,8 @@ export const SIGNIN_URL = `${BASE_URL}/api/v1/user/signin`
 
 export const SIGNUP_URL = `${BASE_URL}/api/v1/user/signup`
 
+export const INFO_URL = `${BASE_URL}/api/v1/user/info`
+
 export const BULK_POSTS = `${BASE_URL}/api/v1/blog/bulk`
 
 export const BASE_BLOG = `${BASE_URL}/api/v1/blog`

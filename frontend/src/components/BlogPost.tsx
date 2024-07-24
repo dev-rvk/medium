@@ -12,7 +12,7 @@ export const BlogPost = ({ blog }: {blog: BulkBlogs}) => {
                         {blog.title}
                     </div>
                     <div className="text-slate-500 pt-2">
-                        Post on 23 July 2024
+                        Post on {blog.createdAt.substring(0, 10)}
                     </div>
                     <div className="pt-4">
                         {blog.content}

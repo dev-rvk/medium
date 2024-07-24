@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router-dom"
 import { Avatar } from "./BlogCard"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { INFO_URL } from "../config"
+import axios from "axios"
 
 export const NavBar = () => {
     const navigate = useNavigate()
@@ -19,12 +21,39 @@ export const NavBar = () => {
         navigate('/signin')
     }
     
+    type UserInfo = {
+        name: string
+        email: string
+    }
+
+    const [user, setUser] = useState<UserInfo>({name: "", email: "null"})
+
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await axios.post(INFO_URL, {}, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
+                setUser(response.data as UserInfo)
+            } catch (error) {
+                console.error('Error fetching user info:', error)
+            }
+        }
+
+        fetchUserInfo()
+    }, [])
+    if(!user.name){
+        user.name = "Anonymous"
+    }
+    
 
     return(
         <nav className="bg-white border-gray-200 dark:bg-gray-900">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a onClick={navigateHome} className="flex items-center space-x-3 rtl:space-x-reverse">
-            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Medium</span>
+            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white cursor-pointer">Medium</span>
         </a>
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <div className="relative">
@@ -35,12 +64,12 @@ export const NavBar = () => {
             <div className="relative">
                 <button type="button" onClick={toggleDropdown} className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded={isDropdownOpen} data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                     <span className="sr-only">Open user menu</span>
-                    <Avatar size='large' text='J'/>
+                    <Avatar size='large' text={user.name[0]}/>
                 </button>
                 <div className={`absolute right-0 mt-2 z-50 ${isDropdownOpen ? '' : 'hidden'} w-48 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`} id="user-dropdown">
                     <div className="px-4 py-3">
-                    <span className="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
-                    <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
+                    <span className="block text-sm text-gray-900 dark:text-white">{user.name}</span>
+                    <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">{user.email}</span>
                     </div>
                     <ul className="py-2" aria-labelledby="user-menu-button">
                         <li>
